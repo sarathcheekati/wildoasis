@@ -15,7 +15,7 @@ import AppLayout from "./ui/AppLayout";
 import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 3 * 1000 } },
+  defaultOptions: { queries: { staleTime: 0 * 1000 } },
 });
 
 function App() {
