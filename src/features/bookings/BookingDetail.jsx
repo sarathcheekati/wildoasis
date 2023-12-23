@@ -1,22 +1,16 @@
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import Spinner from 'ui/Spinner';
-import BookingDataBox from './BookingDataBox';
-import Row from 'ui/Row';
-import Heading from 'ui/Heading';
-import Tag from 'ui/Tag';
-import ButtonGroup from 'ui/ButtonGroup';
-import Button from 'ui/Button';
-import Modal from 'ui/Modal';
-import ConfirmDelete from 'ui/ConfirmDelete';
+import BookingDataBox from "./BookingDataBox";
+import Row from "../../ui/Row";
+import Heading from "../../ui/Heading";
+import Tag from "../../ui/Tag";
+import ButtonGroup from "../../ui/ButtonGroup";
+import Button from "../../ui/Button";
+import ButtonText from "../../ui/ButtonText";
+import Spinner from "../../ui/Spinner";
 
-import { useBooking } from 'features/bookings/useBooking';
-import { useDeleteBooking } from './useDeleteBooking';
-import { useMoveBack } from 'hooks/useMoveBack';
-import { useCheckout } from 'features/check-in-out/useCheckout';
-import ButtonText from 'ui/ButtonText';
-import Empty from 'ui/Empty';
+import { useMoveBack } from "../../hooks/useMoveBack.js";
+import { useBooking } from "./useBooking";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -25,65 +19,39 @@ const HeadingGroup = styled.div`
 `;
 
 function BookingDetail() {
-  const { booking } = useBooking();
-  const { mutate: deleteBooking, isLoading: isDeleting } = useDeleteBooking();
-  const { mutate: checkout, isLoading: isCheckingOut } = useCheckout();
+  //  {  Below booking is an object which has some properties and we are doing nested
+  //    destructuring for getting status and Id property and Id is renaming to bookingId immediately.
+  //To avoid undefined error we are assigning empty object as a default value}
+
+  /* The line `const { booking: { status, id: bookingId } = {}, isLoading } = useBooking();` is using
+  destructuring assignment to extract the `status` and `id` properties from the `booking` object
+  returned by the `useBooking` hook. */
+  const { booking: { status, id: bookingId } = {}, isLoading } = useBooking();
 
   const moveBack = useMoveBack();
-  const navigate = useNavigate();
 
-  // if (isLoading) return <Spinner />;
-  // if (!booking) return <Empty resource='booking' />;
+  if (isLoading) return <Spinner />;
 
   const statusToTagName = {
-    unconfirmed: 'blue',
-    'checked-in': 'green',
-    'checked-out': 'silver',
+    unconfirmed: "blue",
+    "checked-in": "green",
+    "checked-out": "silver",
   };
 
-  const { id: bookingId, status } = booking;
-
-  // We return a fragment so that these elements fit into the page's layout
   return (
     <>
-      <Row type='horizontal'>
+      <Row type="horizontal">
         <HeadingGroup>
-          <Heading type='h1'>Booking #{bookingId}</Heading>
-          <Tag type={statusToTagName[status]}>{status.replace('-', ' ')}</Tag>
+          <Heading as="h1">Booking #{bookingId}</Heading>
+          <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
         </HeadingGroup>
         <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
       </Row>
 
-      <BookingDataBox booking={booking} />
+      {/* <BookingDataBox booking={booking} /> */}
 
       <ButtonGroup>
-        {status === 'unconfirmed' && (
-          <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
-            Check in
-          </Button>
-        )}
-
-        {status === 'checked-in' && (
-          <Button onClick={() => checkout(bookingId)} disabled={isCheckingOut}>
-            Check out
-          </Button>
-        )}
-
-        <Modal>
-          <Modal.Toggle opens='delete'>
-            <Button variation='danger'>Delete booking</Button>
-          </Modal.Toggle>
-          <Modal.Window name='delete'>
-            <ConfirmDelete
-              resource='booking'
-              // These options will be passed wherever the function gets called, and they determine what happens next
-              onConfirm={(options) => deleteBooking(bookingId, options)}
-              disabled={isDeleting}
-            />
-          </Modal.Window>
-        </Modal>
-
-        <Button variation='secondary' onClick={moveBack}>
+        <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>
       </ButtonGroup>
