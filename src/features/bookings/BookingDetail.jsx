@@ -19,14 +19,8 @@ const HeadingGroup = styled.div`
 `;
 
 function BookingDetail() {
-  //  {  Below booking is an object which has some properties and we are doing nested
-  //    destructuring for getting status and Id property and Id is renaming to bookingId immediately.
-  //To avoid undefined error we are assigning empty object as a default value}
-
-  /* The line `const { booking: { status, id: bookingId } = {}, isLoading } = useBooking();` is using
-  destructuring assignment to extract the `status` and `id` properties from the `booking` object
-  returned by the `useBooking` hook. */
-  const { booking: { status, id: bookingId } = {}, isLoading } = useBooking();
+  const { booking = {}, isLoading } = useBooking();
+  const { status, id: bookingId } = booking;
 
   const moveBack = useMoveBack();
 
@@ -48,7 +42,7 @@ function BookingDetail() {
         <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
       </Row>
 
-      {/* <BookingDataBox booking={booking} /> */}
+      <BookingDataBox booking={booking} />
 
       <ButtonGroup>
         <Button variation="secondary" onClick={moveBack}>
