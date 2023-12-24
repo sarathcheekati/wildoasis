@@ -9,7 +9,7 @@ import Input from "../../ui/Input";
 import { useUser } from "./useUser";
 import useUpdateUser from "./useUpdateUser";
 
-function UpdateUserDataForm() {
+const UpdateUserDataForm = () => {
   // We don't need the loading state, and can immediately use the user data, because we know that it has already been loaded at this point
   const {
     user: {
@@ -24,8 +24,21 @@ function UpdateUserDataForm() {
   function handleSubmit(e) {
     e.preventDefault();
     if (!fullName) return;
-    updateUser({ fullName, avatar });
+    updateUser(
+      { fullName, avatar },
+      {
+        onSuccess: () => {
+          setAvatar(null);
+          e.target.reset();
+        },
+      }
+    );
   }
+
+  const handleCancel = () => {
+    setFullName(currentFullName);
+    setAvatar(null);
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -50,13 +63,18 @@ function UpdateUserDataForm() {
         />
       </FormRow>
       <FormRow>
-        <Button type="reset" variation="secondary" disabled={isUpdating}>
+        <Button
+          onClick={handleCancel}
+          type="reset"
+          variation="secondary"
+          disabled={isUpdating}
+        >
           Cancel
         </Button>
         <Button>Update account</Button>
       </FormRow>
     </Form>
   );
-}
+};
 
 export default UpdateUserDataForm;
