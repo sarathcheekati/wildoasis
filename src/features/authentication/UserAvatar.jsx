@@ -28,7 +28,7 @@ const UserAvatar = () => {
   return (
     <StyledUserAvatar>
       <Avatar
-        src={avatar || "../../../public/default-user.jpg"}
+        src={avatar ? avatar : "../../../public/default-user.jpg"}
         alt={`Avatar of ${fullName}`}
       />
       <span>{fullName ? fullName : user.email.split("@")[0]}</span>
