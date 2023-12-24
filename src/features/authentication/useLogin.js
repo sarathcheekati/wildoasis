@@ -16,7 +16,7 @@ const useLogin = () => {
     mutationFn: ({ email, password }) => loginApi({ email, password }),
     onSuccess: (data) => {
       toast.success(`welcome back ${data.user.email}`);
-      queryClient.setQueriesData(["user", data?.user]);
+      queryClient.setQueryData(["user", data?.user]);
       navigate("/dashboard", { replace: true });
     },
     onError: (error) => toast.error(error.message),
