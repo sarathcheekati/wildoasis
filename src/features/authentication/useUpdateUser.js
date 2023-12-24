@@ -9,8 +9,8 @@ const useUpdateUser = () => {
       updateCurrentUser({ fullName, avatar, password }),
     onSuccess: (data) => {
       toast.success("updated successfully");
-      //queryClient.setQueryData("user", data?.user);
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.setQueryData(["user"], data?.user);
+      //queryClient.invalidateQueries({ queryKey: ["user"] });
     },
     onError: (error) => toast.error(error.message),
   });
