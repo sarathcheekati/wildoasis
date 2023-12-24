@@ -17,7 +17,7 @@ const useLogin = () => {
     onSuccess: (data) => {
       toast.success(`welcome back ${data.user.email}`);
       queryClient.setQueriesData(["user", data?.user]);
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     },
     onError: (error) => toast.error(error.message),
   });

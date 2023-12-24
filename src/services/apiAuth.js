@@ -18,3 +18,14 @@ export const getCurrentUser = async () => {
   const { data, error } = await supabase.auth.getUser();
   return data?.user;
 };
+
+export const logout = async () => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      throw new Error(error);
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
