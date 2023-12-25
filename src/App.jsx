@@ -18,6 +18,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Suspense, lazy } from "react";
 import { Toaster } from "react-hot-toast";
 import Spinner from "./ui/Spinner.jsx";
+import { DarkModeProvider } from "./contexts/DarkModeContext";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const GlobalStyles = lazy(() => import("./styles/GlobalStyles.js"));
@@ -45,55 +46,58 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
-      <Suspense fallback={<Spinner />}>
-        <GlobalStyles />
-        <BrowserRouter>
-          <Routes>
-            <Route
-              element={
-                <ProtectedRote>
-                  <AppLayout />
-                </ProtectedRote>
-              }
-            >
-              <Route index element={<Navigate replace to="dashboard" />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="bookings" element={<Bookings />} />
-              <Route path="bookings/:bookingId" element={<Booking />} />
-              <Route path="checkin/:bookingId" element={<Checkin />} />
-              <Route path="cabins" element={<Cabins />} />
-              <Route path="users" element={<Users />} />
-              <Route path="settings" element={<Settings />} />
-              <Route path="account" element={<Account />} />
-            </Route>
+      <DarkModeProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <Suspense fallback={<Spinner />}>
+          <GlobalStyles />
 
-            <Route path="login" element={<Login />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </BrowserRouter>
+          <BrowserRouter>
+            <Routes>
+              <Route
+                element={
+                  <ProtectedRote>
+                    <AppLayout />
+                  </ProtectedRote>
+                }
+              >
+                <Route index element={<Navigate replace to="dashboard" />} />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="bookings" element={<Bookings />} />
+                <Route path="bookings/:bookingId" element={<Booking />} />
+                <Route path="checkin/:bookingId" element={<Checkin />} />
+                <Route path="cabins" element={<Cabins />} />
+                <Route path="users" element={<Users />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="account" element={<Account />} />
+              </Route>
 
-        <Toaster
-          position="top-center"
-          gutter={12}
-          containerStyle={{ margin: "8px" }}
-          toastOptions={{
-            success: {
-              duration: 3000,
-            },
-            error: {
-              duration: 5000,
-            },
-            style: {
-              fontSize: "16px",
-              maxWidth: "500px",
-              padding: "16px 24px",
-              backgroundColor: "var(--color-grey-0)",
-              color: "var(--color-grey-700)",
-            },
-          }}
-        />
-      </Suspense>
+              <Route path="login" element={<Login />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </BrowserRouter>
+
+          <Toaster
+            position="top-center"
+            gutter={12}
+            containerStyle={{ margin: "8px" }}
+            toastOptions={{
+              success: {
+                duration: 3000,
+              },
+              error: {
+                duration: 5000,
+              },
+              style: {
+                fontSize: "16px",
+                maxWidth: "500px",
+                padding: "16px 24px",
+                backgroundColor: "var(--color-grey-0)",
+                color: "var(--color-grey-700)",
+              },
+            }}
+          />
+        </Suspense>
+      </DarkModeProvider>
     </QueryClientProvider>
   );
 }
